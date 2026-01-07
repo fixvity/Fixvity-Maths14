@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Probability Calculator – Explain Like a Teacher</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style>
+:root{
+  --blue:#2563eb;
+  --bg:#f4f6fb;
+  --card:#ffffff;
+  --muted:#6b7280;
+  --radius:14px;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:system-ui,-apple-system,Segoe UI,Roboto;
+  background:var(--bg);
+  color:#111827;
+}
+.container{
+  max-width:1100px;
+  margin:auto;
+  padding:16px;
+}
+.card{
+  background:var(--card);
+  border-radius:var(--radius);
+  box-shadow:0 12px 30px rgba(0,0,0,.08);
+  padding:18px;
+  margin-bottom:16px;
+}
+h1{margin:0;color:var(--blue)}
+.subtitle{color:var(--muted);margin-top:6px}
+
+label{
+  font-weight:600;
+  font-size:14px;
+}
+input,select{
+  width:100%;
+  padding:12px;
+  margin-top:6px;
+  margin-bottom:14px;
+  border-radius:10px;
+  border:1px solid #d1d5db;
+  font-size:15px;
+}
+
+button{
+  width:100%;
+  padding:14px;
+  border:none;
+  border-radius:12px;
+  background:var(--blue);
+  color:white;
+  font-weight:700;
+  cursor:pointer;
+}
+button.secondary{
+  background:#eef2ff;
+  color:#111;
+  margin-top:10px;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:16px;
+}
+@media(max-width:900px){
+  .grid{grid-template-columns:1fr}
+}
+
+.result-box{
+  background:#f9fafb;
+  border-radius:10px;
+  padding:14px;
+}
+.step{
+  background:#f3f4f6;
+  border-radius:8px;
+  padding:10px;
+  margin-bottom:8px;
+}
+
+.badge{
+  display:inline-block;
+  padding:4px 10px;
+  background:#e0e7ff;
+  color:#1e3a8a;
+  border-radius:999px;
+  font-size:12px;
+  margin-bottom:6px;
+}
+
+.error{color:#dc2626;font-weight:600}
+</style>
+</head>
+
+<body>
+<div class="container">
+
+<!-- INPUT -->
+<div class="card">
+<h1>Probability Calculator</h1>
+<p class="subtitle">
+Classical • Conditional • Bayes’ Theorem • Explain like a teacher
+</p>
+
+<label>Probability of Event A (0–1)</label>
+<input id="pa" value="0.4">
+
+<label>Probability of Event B (0–1)</label>
+<input id="pb" value="0.5">
+
+<label>Probability of A ∩ B (if known)</label>
+<input id="pab" value="0.2">
+
+<label>
+  <input type="checkbox" id="teach" checked>
+  Explain like a teacher
+</label>
+
+<button onclick="calculate()">Calculate Probability</button>
+<button class="secondary" onclick="resetAll()">Reset</button>
+</div>
+
+<!-- OUTPUT -->
+<div class="grid">
+<div class="card">
+<h3>Results</h3>
+<div id="result" class="result-box"></div>
+</div>
+
+<div class="card">
+<h3>Step-by-Step</h3>
+<div id="steps"></div>
+</div>
+</div>
+
+</div>
+
+<script>
+function calculate(){
+  const pa = parseFloat(document.getElementById("pa").value);
+  const pb = parseFloat(document.getElementById("pb").value);
+  const pab = parseFloat(document.getElementById("pab").value);
+  const teach = document.getElementById("teach").checked;
+
+  const resultBox = document.getElementById("result");
+  const stepsBox = document.getElementById("steps");
+
+  resultBox.innerHTML="";
+  stepsBox.innerHTML="";
+
+  if(
+    isNaN(pa)||isNaN(pb)||isNaN(pab)||
+    pa<0||pa>1||pb<0||pb>1||pab<0||pab>1
+  ){
+    resultBox.innerHTML=`<span class="error">Probabilities must be between 0 and 1.</span>`;
+    return;
+  }
+
+  const pAorB = pa + pb - pab;
+  const pAbar = 1 - pa;
+  const pBbar = 1 - pb;
+  const pAgivenB = pab / pb;
+  const pBgivenA = pab / pa;
+
+  resultBox.innerHTML = `
+    <span class="badge">Final Results</span><br>
+    P(A) = ${pa.toFixed(4)}<br>
+    P(B) = ${pb.toFixed(4)}<br>
+    P(A ∩ B) = ${pab.toFixed(4)}<br>
+    P(A ∪ B) = ${pAorB.toFixed(4)}<br>
+    P(Ā) = ${pAbar.toFixed(4)}<br>
+    P(B̄) = ${pBbar.toFixed(4)}<br>
+    P(A | B) = ${pAgivenB.toFixed(4)}<br>
+    P(B | A) = ${pBgivenA.toFixed(4)}
+  `;
+
+  if(teach){
+    stepsBox.innerHTML += `
+      <div class="step">We begin by identifying the given probabilities.</div>
+      <div class="step">Union rule: P(A ∪ B) = P(A) + P(B) − P(A ∩ B).</div>
+      <div class="step">Complement rule: P(Ā) = 1 − P(A).</div>
+      <div class="step">Conditional probability: P(A | B) = P(A ∩ B) / P(B).</div>
+      <div class="step">Bayes’ theorem follows directly from conditional probability.</div>
+    `;
+  }
+}
+
+function resetAll(){
+  document.getElementById("pa").value="0.4";
+  document-href
+  document.getElementById("pb").value="0.5";
+  document.getElementById("pab").value="0.2";
+  document.getElementById("result").innerHTML="";
+  document.getElementById("steps").innerHTML="";
+}
+</script>
+
+</body>
+</html>
